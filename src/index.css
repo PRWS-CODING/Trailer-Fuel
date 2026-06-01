@@ -1,0 +1,48 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+
+:root {
+  /* Grayscale / Backgrounds */
+  --bg-main: #f1f5f9; /* Slightly darker slate to make white cards pop */
+  --bg-card: #ffffff; /* Pure white for cards */
+  --border-color: #cbd5e1; /* Darker border for outdoor visibility */
+
+  /* Text Colors */
+  --text-primary: #0f172a; /* Near-black slate for maximum contrast */
+  --text-secondary: #334155; /* Darker gray for readable secondary text */
+
+  /* Brand / Action Colors */
+  --primary: #1d4ed8; /* Deeper blue for better sunlight visibility */
+  --primary-hover: #1e40af;
+  --accent: #0f172a; /* Deep Navy (Sidebar/Headers) */
+
+  /* Status Colors */
+  --success: #10b981; /* Emerald green for "Log Added" */
+  --warning: #f59e0b; /* Amber for low fuel/alerts */
+  --danger: #ef4444; /* Soft red for errors */
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+
+  /* Mapping missing variables used in App.css */
+  --accent-bg: #f8fafc;
+  --accent-border: var(--border-color);
+  --border: var(--border-color);
+  --text-h: var(--text-primary);
+  --social-bg: var(--bg-card);
+  --shadow: var(--shadow-md);
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
