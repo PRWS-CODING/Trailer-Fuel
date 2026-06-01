@@ -9,6 +9,13 @@ function Home() {
   const [fuel, setFuel] = useState("");
 
   const handleEnter = async () => {
+    if (!supabase) {
+      alert(
+        "Database connection is missing. Please check your .env configuration.",
+      );
+      return;
+    }
+
     if (!trailer || !hours || !fuel) return alert("Please fill in all fields");
 
     const { error } = await supabase.from("trailers").insert([
@@ -36,19 +43,22 @@ function Home() {
       <div className="container">
         <div className="row">
           <input
-            type="text"
+            type="number"
+            inputMode="numeric"
             placeholder="Trailer Number"
             value={trailer}
             onChange={(e) => setTrailer(e.target.value)}
           />
           <input
-            type="text"
+            type="number"
+            inputMode="decimal"
             placeholder="Hourmeter Reading"
             value={hours}
             onChange={(e) => setHours(e.target.value)}
           />
           <input
-            type="text"
+            type="number"
+            inputMode="decimal"
             placeholder="Gallons"
             value={fuel}
             onChange={(e) => setFuel(e.target.value)}

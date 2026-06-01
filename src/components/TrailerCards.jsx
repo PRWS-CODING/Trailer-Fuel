@@ -8,6 +8,11 @@ function TrailerCards() {
 
   useEffect(() => {
     const fetchTrailers = async () => {
+      if (!supabase) {
+        console.warn("Supabase client is null. Skipping fetch.");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("trailers")
         .select("*")
