@@ -15,9 +15,12 @@ export const supabase =
 if (!supabase) {
   if (!supabaseUrl)
     console.error("Environment Check: VITE_SUPABASE_URL is missing.");
+    console.error("Supabase Error: VITE_SUPABASE_URL is missing in Project Settings.");
   if (!supabaseAnonKey)
     console.error("Environment Check: VITE_SUPABASE_ANON_KEY is missing.");
+    console.error("Supabase Error: VITE_SUPABASE_ANON_KEY is missing in Project Settings.");
   console.warn(
     "Database features are disabled until .env is configured and server is restarted.",
+    "Database features are disabled. Add variables to Vercel Settings > Environment Variables and Redeploy.",
   );
 }

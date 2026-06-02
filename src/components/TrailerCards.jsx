@@ -48,8 +48,8 @@ function TrailerCards() {
                   <strong>Fuel:</strong> {item.fuel} gal
                 </p>
                 <p>
-                  <strong>Time:</strong>{" "}
-                  {new Date(item.created_at).toLocaleTimeString()}
+                  <strong>Timestamp:</strong>{" "}
+                  {new Date(item.created_at).toLocaleString()}
                 </p>
               </div>
             </div>
