@@ -6,22 +6,40 @@ function TrailerCards() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [trailerData, setTrailerData] = useState([]);
 
+  const fetchTrailers = async () => {
+    if (!supabase) {
+      console.warn("Supabase client is null. Skipping fetch.");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("trailers")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error && data) setTrailerData(data);
+  };
+
   useEffect(() => {
-    const fetchTrailers = async () => {
-      if (!supabase) {
-        console.warn("Supabase client is null. Skipping fetch.");
-        return;
-      }
+    if (isExpanded) {
+      fetchTrailers();
 
-      const { data, error } = await supabase
-        .from("trailers")
-        .select("*")
-        .order("created_at", { ascending: false });
+      // Subscribe to real-time changes to keep the list updated and sorted
+      const channel = supabase
+        .channel("trailers-realtime")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "trailers" },
+          () => {
+            fetchTrailers(); // Refresh the list whenever data is inserted or updated
+          },
+        )
+        .subscribe();
 
-      if (!error) setTrailerData(data);
-    };
-
-    if (isExpanded) fetchTrailers();
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
   }, [isExpanded]);
 
   return (
@@ -37,23 +55,30 @@ function TrailerCards() {
 
       {isExpanded && (
         <div className="trailer-list">
-          {trailerData.map((item) => (
-            <div key={item.id} className="trailer-card">
-              <div className="trailer-number">{item.trailer_number}</div>
-              <div className="trailer-details">
-                <p>
-                  <strong>Hours:</strong> {item.hours}
-                </p>
-                <p>
-                  <strong>Fuel:</strong> {item.fuel} gal
-                </p>
-                <p>
-                  <strong>Timestamp:</strong>{" "}
-                  {new Date(item.created_at).toLocaleString()}
-                </p>
+          {trailerData.length === 0 ? (
+            <p className="no-data">No logs found. Enter data above to begin.</p>
+          ) : (
+            trailerData.map((item) => (
+              <div key={item.id} className="trailer-card">
+                <div className="trailer-number">
+                  Trailer #{item.trailer_number}
+                </div>
+                <div className="trailer-details">
+                  <p>
+                    <strong>Hours:</strong> {item.hours.toLocaleString()}
+                  </p>
+                  <p>
+                    <strong>Fuel:</strong> {parseFloat(item.fuel).toFixed(2)}{" "}
+                    gal
+                  </p>
+                  <p>
+                    <strong>Last Updated:</strong>{" "}
+                    {new Date(item.created_at).toLocaleString()}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       )}
     </div>

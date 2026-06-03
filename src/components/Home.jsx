@@ -18,16 +18,19 @@ function Home() {
 
     if (!trailer || !hours || !fuel) return alert("Please fill in all fields");
 
-    const { error } = await supabase.from("trailers").insert([
+    const { error } = await supabase.from("trailers").upsert(
       {
         trailer_number: parseInt(trailer),
         hours: parseInt(hours),
         fuel: parseFloat(fuel),
+        created_at: new Date().toISOString(),
       },
-    ]);
+      { onConflict: "trailer_number" },
+    );
 
     if (error) {
-      console.error("Error inserting data:", error);
+      console.error("Save Error:", error.message, error.details);
+      alert(`Failed to save: ${error.message}`);
       return;
     }
 
